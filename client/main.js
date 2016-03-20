@@ -11,8 +11,10 @@ socket.on('connected', function(data) {
     connected(data);
 });
 
+var localboard;
+
 socket.on('started', function(data) {
-    var localboard = board("#go-board-container");
+    localboard = board("#go-board-container");
     
     localboard.create([], function(coords) {
         console.info("player played" + coords);
@@ -20,6 +22,21 @@ socket.on('started', function(data) {
         socket.emit("played", coords);
     });
 });
+
+socket.on("update", function(state){
+    var newpos = [];
+    
+    for (var i = 0; i< state.length; i++){
+        for (var j = 0; j < state.length; j++){
+            cell = state[i][j];
+            if (cell!==0){
+                newpos.push([i,j,cell]);
+            }        
+        }
+    }
+    
+    localboard.update(newpos);
+})
 
 var state = ko.observableArray();
 var messages = ko.observableArray();

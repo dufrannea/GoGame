@@ -64,8 +64,10 @@
 	    connected(data);
 	});
 	
+	var localboard;
+	
 	socket.on('started', function(data) {
-	    var localboard = board("#go-board-container");
+	    localboard = board("#go-board-container");
 	    
 	    localboard.create([], function(coords) {
 	        console.info("player played" + coords);
@@ -73,6 +75,21 @@
 	        socket.emit("played", coords);
 	    });
 	});
+	
+	socket.on("update", function(state){
+	    var newpos = [];
+	    
+	    for (var i = 0; i< state.length; i++){
+	        for (var j = 0; j < state.length; j++){
+	            cell = state[i][j];
+	            if (cell!==0){
+	                newpos.push([i,j,cell]);
+	            }        
+	        }
+	    }
+	    
+	    localboard.update(newpos);
+	})
 	
 	var state = ko.observableArray();
 	var messages = ko.observableArray();
@@ -13468,7 +13485,7 @@
 	            .attr("y2", function(d) { return scale(d) + "px" })
 	            .attr("style", "stroke:rgb(0,0,0);stroke-width:1")
 	
-	        var circles = svg.append("g");
+	        circles = svg.append("g");
 	        circles.selectAll("circle")
 	            .data(positions)
 	            .enter()

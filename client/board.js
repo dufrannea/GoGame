@@ -65,7 +65,7 @@ var board = function(elementSelector) {
             .attr("y2", function(d) { return scale(d) + "px" })
             .attr("style", "stroke:rgb(0,0,0);stroke-width:1")
 
-        var circles = svg.append("g");
+        circles = svg.append("g");
         circles.selectAll("circle")
             .data(positions)
             .enter()

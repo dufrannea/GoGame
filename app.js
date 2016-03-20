@@ -62,14 +62,33 @@ io.on('connection', function(socket) {
             
             games.push({
                 roomName : roomName,
-                players : waitingToPlay
+                players : waitingToPlay,
+                game : game
             });
                             
             waitingToPlay = [];
         }
     });
     
-    socket.on("played", function(){
-        console.info("outside room play")
+    socket.on("played", function(args){
+          var foundGames =  games.filter(game => 
+                game.players.filter(player => player.client.id === socket.client.id).length > 0);
+          if (foundGames.length === 0){
+            console.info("player is not is game");
+            return;
+          }
+          game = foundGames[0];
+          gameEngine = foundGames[0].game;
+          
+          // TODO : put player index in there
+          gameEngine.play({ x : args[0], y : args[1]});
+          
+          // here check everything in the game
+          socket.to(game.roomName)
+                .emit("message", "other player played" + args)
+                
+          // send state to everyone
+          io.to(game.roomName)
+            .emit("update", gameEngine.state); 
     })
 });
