@@ -3,6 +3,7 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var createGame = require("./game").create;
+var guid = require('./utils').guid;
 
 server.listen(8080);
 
@@ -13,48 +14,62 @@ app.get('/', function(req, res) {
 // serve static files
 app.use(express.static('build'));
 
-var connected = [];
+var waitingToPlay = [];
+var games = [];
 
+var alreadyInGame = function(socket){
+    return games.filter(game => 
+        game.players.filter(player => player.client.id === socket.client.id).length > 0).length > 0;
+}
 // startup websocket channel
 io.on('connection', function(socket) {
-    // socket.on('my other event', function(data) {
-    //     console.log(data);
-    // });
-    // var users = connected.map(x=>x.client.id);
-    // socket.emit("connected", users);
-    // socket.broadcast.emit('connected', users);
-
+    
+    // a player hits start
     socket.on("start", () => {
-        if (connected.filter(x => x.client.id === socket.client.id).length > 0) {
+        
+        if (alreadyInGame(socket)){
+            socket.emit("message", "you are already playing dumb ass");
             return;
         }
-        connected.push(socket);
+        
+        if (waitingToPlay.filter(x => x.client.id === socket.client.id).length > 0) {
+            socket.emit("message", "you are already waiting dumb ass");
+            return;
+        }
+        
+        waitingToPlay.push(socket);
+        socket.emit("message", "waiting for other player to come join you");
 
-        if (connected.length === 2) {
+        if (waitingToPlay.length === 2) {
             var game = createGame(19);
 
-            connected.forEach(x => {
+            var roomName = guid();
+            
+            waitingToPlay.forEach(x => {
                 // join the game room
-                x.join("gameroom");
-
-                // x.emit("started", {
-                //     state : game.state
-                // });
-
+                x.join(roomName);
             });
 
-            io.to("gameroom")
+            io.to(roomName)
                 .emit(
                 "started",
                 {
                     state: game.state
                 });
 
-            io.to("gameroom")
-                .emit('message', "game starting");
-                
-            // setup room
-            io.on("")
+            io.to(roomName)
+                .emit('message', "game " + roomName);
+            
+            games.push({
+                roomName : roomName,
+                players : waitingToPlay
+            });
+                            
+            waitingToPlay = [];
         }
     });
+    
+    socket.on("played", function(){
+        console.info("outside room play")
+    })
 });
