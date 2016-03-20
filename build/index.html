@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+</head>
+
+<body>
+    <button data-bind="click : start">Start</button>
+    <h3>Messages</h3>
+    <ul data-bind="foreach : messages">
+        <li data-bind="text : $data"></li>
+    </ul>
+
+    <h3>Connected</h3>
+    <ul data-bind="foreach : connected">
+        <li data-bind="text : $data"></li>
+    </ul>
+
+    <h3>Game</h3>
+    <div id="go-board-container">
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>
