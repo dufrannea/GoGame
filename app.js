@@ -25,6 +25,9 @@ io.on('connection', function(socket) {
     // socket.broadcast.emit('connected', users);
 
     socket.on("start", () => {
+        if (connected.filter(x => x.client.id === socket.client.id).length > 0) {
+            return;
+        }
         connected.push(socket);
 
         if (connected.length === 2) {
@@ -41,12 +44,17 @@ io.on('connection', function(socket) {
             });
 
             io.to("gameroom")
-                .emit("started", {
+                .emit(
+                "started",
+                {
                     state: game.state
                 });
 
             io.to("gameroom")
                 .emit('message', "game starting");
+                
+            // setup room
+            io.on("")
         }
     });
 });

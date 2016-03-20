@@ -10,10 +10,15 @@ socket.on('message', function(data) {
 socket.on('connected', function(data) {
     connected(data);
 });
- 
-socket.on('started', function(data){
-   var localboard =board("#go-board-container"); 
-   localboard.create([[0, 0, 1], [1, 2, 0], [3, 2, 1], [10, 2, 1]]);
+
+socket.on('started', function(data) {
+    var localboard = board("#go-board-container");
+    
+    localboard.create([], function(coords) {
+        console.info("player played" + coords);
+        
+        socket.emit("played", coords);
+    });
 });
 
 var state = ko.observableArray();
@@ -21,10 +26,10 @@ var messages = ko.observableArray();
 var connected = ko.observableArray();
 
 ko.applyBindings({
-    start : function(){
+    start: function() {
         socket.emit("start");
     },
-    messages : messages,
-    connected : connected,
-    state : state
+    messages: messages,
+    connected: connected,
+    state: state
 });

@@ -23,7 +23,7 @@ var board = function(elementSelector) {
     /**
      * Creates the initial board
      */
-    function create(positions) {
+    function create(positions, playcallback) {
         var div = d3.select(elementSelector)
             .append("div")
             .style("width", boardSize + "px")
@@ -99,7 +99,6 @@ var board = function(elementSelector) {
         document.querySelector(elementSelector)
             .querySelector("svg")
             .addEventListener("mousemove", function() {
-                //console.info(arguments)
                 var xpos = Math.round((arguments[0].offsetX - margin) * (size - 1) / (boardSize - 2 * margin))
                 var ypos = Math.round((arguments[0].offsetY - margin) * (size - 1) / (boardSize - 2 * margin))
 
@@ -110,6 +109,19 @@ var board = function(elementSelector) {
                 }
                 else {
                     updateHoverPosition([]);
+                }
+            });
+
+        document.querySelector(elementSelector)
+            .querySelector("svg")
+            .addEventListener("click", function() {
+                //console.info(arguments)
+                var xpos = Math.round((arguments[0].offsetX - margin) * (size - 1) / (boardSize - 2 * margin))
+                var ypos = Math.round((arguments[0].offsetY - margin) * (size - 1) / (boardSize - 2 * margin))
+
+                // if position is within the grid
+                if (xpos >= 0 && xpos < size && ypos >= 0 && ypos < size) {
+                    playcallback([xpos,ypos]);
                 }
             });
     }
