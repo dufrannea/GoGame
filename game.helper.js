@@ -54,23 +54,31 @@ function getCellsToTest(state, position, player) {
  * @returns nothing.
  */
 function updateBoard(state, position, player) {
+    getZonesToRemove(state, position, player).forEach(zone => {
+            zone.forEach(x => {
+                state[x[0]][x[1]] = 0;
+            });
+    });
+}
+
+function getZonesToRemove(state, position, player) {
     let visited = createEmptyBoard(state.length);
 
     let cellsToTest = getCellsToTest(state, position, player);
 
-    if (cellsToTest.length === 0) return;
+    let zonesToRemove = [];
+    if (cellsToTest.length === 0) return zonesToRemove;
 
     cellsToTest.forEach(cell => {
         // mark cell as visited.
         visited[cell[0]][cell[1]] = 1;
         let zone = [cell];
         if (!isInFreeZone(visited, state, cell, 3 - player, zone)) {
-            // zone should be removed
-            zone.forEach(x => {
-                state[x[0]][x[1]] = 0;
-            });
+            zonesToRemove.push(zone);
         }
     });
+
+    return zonesToRemove;
 }
 
 /**
@@ -79,7 +87,7 @@ function updateBoard(state, position, player) {
  *  surrounding cells are requested.
  * @return an array of positions.
  */
-function surroundingcells(position) {
+function surroundingcells(position, size) {
     let result = [];
     let x = position[0];
     let y = position[1];
@@ -110,7 +118,7 @@ function isInFreeZone(visited, state, position, player, zone) {
     if (getState(position) !== player) throw "position should belong to player";
 
     let cellsToProcess = [];
-    let surrounding = surroundingcells(position);
+    let surrounding = surroundingcells(position, size);
     for (var i in surrounding) {
         let cell = surrounding[i];
         if (isVisited(cell)) continue;
@@ -142,5 +150,6 @@ module.exports = {
     getCellsToTest: getCellsToTest,
     isInFreeZone: isInFreeZone,
     updateBoard: updateBoard,
-    surroundingcells : surroundingcells
+    surroundingcells: surroundingcells,
+    getZonesToRemove : getZonesToRemove
 };
