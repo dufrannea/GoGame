@@ -24,7 +24,7 @@ gulp.task("build", ["build:index"], () => {
             // Add `.ts` and `.tsx` as a resolvable extension.
             extensions: ['', '.webpack.js', '.web.js', '.js']
         },
-        devtool : "source-map"
+        devtool: "source-map"
     };
 
     return gulp
@@ -39,13 +39,21 @@ gulp.task('watch', () => {
     gulp.watch(['./client/**/*.*'], ["build"]);
 });
 
-gulp.task('test',function(){
-    return gulp.src('testgame.js')
-               .pipe(tape({
-                    reporter : tapSpec()
-			    }));
+gulp.task('test', function() {
+    return gulp.src([
+                'testgame.js',
+                'game.helper.tests.js'
+            ])
+            .pipe(tape({
+                reporter: tapSpec()
+            }));
 });
 
-gulp.task('watch:tests',function(){
-    return gulp.watch(['testgame.js','game.js'], ["test"]);
+gulp.task('watch:tests', function() {
+    return gulp.watch([
+        'testgame.js',
+        'game.js',
+        'game.helper.js',
+        'game.helper.tests.js'
+    ], ["test"]);
 });
