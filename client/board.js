@@ -1,6 +1,6 @@
 var d3 = require("d3");
 
-var board = function(elementSelector) {
+var board = function(elementSelector, playerIndex) {
     var marginTop = 30,
         marginLeft = 30,
         size = 13,
@@ -19,6 +19,7 @@ var board = function(elementSelector) {
     }
 
     var circles;
+    var frozen = false;
 
     /**
      * Creates the initial board
@@ -86,42 +87,46 @@ var board = function(elementSelector) {
                 .attr("cx", function(d) { return scale(d[0]) })
                 .attr("cy", function(d) { return scale(d[1]) })
                 .attr("r", 20)
-                .attr("fill", function(d) { return d[2] === 0 ? "white" : "black" });
+                .attr("fill", function(d) { return d[2] === 1 ? "white" : "black" });
 
             hovercircles
                 .attr("cx", function(d) { return scale(d[0]) })
                 .attr("cy", function(d) { return scale(d[1]) })
                 .attr("r", 20)
-                .attr("fill", function(d) { return d[2] === 0 ? "white" : "black" });
+                .attr("fill", function(d) { return d[2] === 1 ? "white" : "black" });
             hovercircles.exit().remove();
         }
 
         document.querySelector(elementSelector)
             .querySelector("svg")
             .addEventListener("mousemove", function() {
-                var xpos = Math.round((arguments[0].offsetX - margin) * (size - 1) / (boardSize - 2 * margin))
-                var ypos = Math.round((arguments[0].offsetY - margin) * (size - 1) / (boardSize - 2 * margin))
+                if (!frozen) {
+                    var xpos = Math.round((arguments[0].offsetX - margin) * (size - 1) / (boardSize - 2 * margin))
+                    var ypos = Math.round((arguments[0].offsetY - margin) * (size - 1) / (boardSize - 2 * margin))
 
 
-                // if position is within the grid
-                if (xpos >= 0 && xpos < size && ypos >= 0 && ypos < size) {
-                    updateHoverPosition([[xpos, ypos, 1]])
-                }
-                else {
-                    updateHoverPosition([]);
+                    // if position is within the grid
+                    if (xpos >= 0 && xpos < size && ypos >= 0 && ypos < size) {
+                        updateHoverPosition([[xpos, ypos, playerIndex]])
+                    }
+                    else {
+                        updateHoverPosition([]);
+                    }
                 }
             });
 
         document.querySelector(elementSelector)
             .querySelector("svg")
             .addEventListener("click", function() {
-                //console.info(arguments)
-                var xpos = Math.round((arguments[0].offsetX - margin) * (size - 1) / (boardSize - 2 * margin))
-                var ypos = Math.round((arguments[0].offsetY - margin) * (size - 1) / (boardSize - 2 * margin))
+                if (!frozen) {
+                    //console.info(arguments)
+                    var xpos = Math.round((arguments[0].offsetX - margin) * (size - 1) / (boardSize - 2 * margin))
+                    var ypos = Math.round((arguments[0].offsetY - margin) * (size - 1) / (boardSize - 2 * margin))
 
-                // if position is within the grid
-                if (xpos >= 0 && xpos < size && ypos >= 0 && ypos < size) {
-                    playcallback([xpos,ypos]);
+                    // if position is within the grid
+                    if (xpos >= 0 && xpos < size && ypos >= 0 && ypos < size) {
+                        playcallback([xpos, ypos]);
+                    }
                 }
             });
     }
@@ -130,19 +135,36 @@ var board = function(elementSelector) {
      * Updates positions
      */
     function update(positions) {
-        circles.selectAll("circle")
+        var localCircles = circles.selectAll("circle")
             .data(positions)
-            .enter()
+
+        localCircles.enter()
             .append("circle")
             .attr("cx", function(d) { return scale(d[0]) })
             .attr("cy", function(d) { return scale(d[1]) })
             .attr("r", 20)
-            .attr("fill", function(d) { return d[2] === 0 ? "white" : "black" });
+            .attr("fill", function(d) { return d[2] === 1 ? "white" : "black" });
+
+        localCircles
+            .attr("cx", function(d) { return scale(d[0]) })
+            .attr("cy", function(d) { return scale(d[1]) })
+            .attr("r", 20)
+            .attr("fill", function(d) { return d[2] === 1 ? "white" : "black" });
     }
 
+    function freeze() {
+        frozen = true;
+    }
+
+    function unfreeze() {
+        frozen = false;
+    }
+    
     return {
         create: create,
-        update: update
+        update: update,
+        freeze: freeze,
+        unfreeze : unfreeze
     }
 }
 

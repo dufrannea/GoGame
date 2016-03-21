@@ -6,11 +6,16 @@
 
 <body>
     <button data-bind="click : start">Start</button>
-    <h3>Messages</h3>
-    <ul data-bind="foreach : messages">
-        <li data-bind="text : $data"></li>
-    </ul>
-
+    
+    
+    
+    <div class="messages-panel" style="float:right;">
+        <h3>Messages</h3>
+        <ul data-bind="foreach : messages">
+            <li data-bind="text : $data"></li>
+        </ul>
+    </div>
+    
     <h3>Connected</h3>
     <ul data-bind="foreach : connected">
         <li data-bind="text : $data"></li>

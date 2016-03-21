@@ -45,17 +45,17 @@ io.on('connection', function(socket) {
 
             var roomName = guid();
             
+            var index = 1;
+            
             waitingToPlay.forEach(x => {
                 // join the game room
                 x.join(roomName);
-            });
-
-            io.to(roomName)
-                .emit(
-                "started",
-                {
-                    state: game.state
+                x.emit('started',{
+                    state : game.state,
+                    player : index
                 });
+                index++;
+            });
 
             io.to(roomName)
                 .emit('message', "game " + roomName);
@@ -73,12 +73,20 @@ io.on('connection', function(socket) {
     socket.on("played", function(args){
           var foundGames =  games.filter(game => 
                 game.players.filter(player => player.client.id === socket.client.id).length > 0);
+          
           if (foundGames.length === 0){
             console.info("player is not is game");
             return;
           }
           game = foundGames[0];
           gameEngine = foundGames[0].game;
+          playerIndex = game.players[0].client.id === socket.client.id ? 1 : 2;
+          
+          if (playerIndex !== gameEngine.currentPlayer()){
+              // not your turn
+              socket.emit("message", "It is not for you to play");
+              return;
+          }
           
           // TODO : put player index in there
           gameEngine.play({ x : args[0], y : args[1]});
@@ -89,6 +97,9 @@ io.on('connection', function(socket) {
                 
           // send state to everyone
           io.to(game.roomName)
-            .emit("update", gameEngine.state); 
+            .emit("update", { 
+                state : gameEngine.state,
+                player : gameEngine.currentPlayer()
+            }); 
     })
 });

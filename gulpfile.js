@@ -1,7 +1,9 @@
 'use strict';
 
 const gulp = require('gulp'),
-    webpack = require('gulp-webpack');
+    webpack = require('gulp-webpack'),
+    tape = require('gulp-tape'),
+    tapSpec = require('tap-spec');
 
 gulp.task("build:index", () => {
     return gulp
@@ -35,4 +37,15 @@ gulp.task("build", ["build:index"], () => {
 
 gulp.task('watch', () => {
     gulp.watch(['./client/**/*.*'], ["build"]);
+});
+
+gulp.task('test',function(){
+    return gulp.src('testgame.js')
+               .pipe(tape({
+                    reporter : tapSpec()
+			    }));
+});
+
+gulp.task('watch:tests',function(){
+    return gulp.watch(['testgame.js','game.js'], ["test"]);
 });
