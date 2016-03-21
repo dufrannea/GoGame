@@ -49,13 +49,24 @@ function updateBoard(state, position, player) {
         // mark cell as visited.
         visited[cell[0]][cell[1]] = 1;
         let zone = [cell];
-        if (!isInFreeZone(visited, state, cell, 3 - player, zone)){
+        if (!isInFreeZone(visited, state, cell, 3 - player, zone)) {
             // zone should be removed
-            zone.forEach(x=>{
+            zone.forEach(x => {
                 state[x[0]][x[1]] = 0;
             });
         }
     });
+}
+
+function surroundingcells(position) {
+    let result = [];
+    let x = position[0];
+    let y = position[1];
+    if (x > 0) result.push([x - 1, y])
+    if (x < size - 1) result.push([x + 1, y])
+    if (y > 0) result.push([x, y - 1])
+    if (y < size - 1) result.push([x, y + 1])
+    return result;
 }
 
 /**
@@ -65,19 +76,9 @@ function updateBoard(state, position, player) {
  * @param player : player to search free group for.
  */
 function isInFreeZone(visited, state, position, player, zone) {
-    let size      = state.length,
-        getState  = (position) => state[position[0]][position[1]],
-        isVisited = (position) => visited[position[0]][position[1]],
-        surroundingcells = (position) => {
-            let result = [];
-            let x = position[0];
-            let y = position[1];
-            if (x > 0) result.push([x - 1, y])
-            if (x < size - 1) result.push([x + 1, y])
-            if (y > 0) result.push([x, y - 1])
-            if (y < size - 1) result.push([x, y + 1])
-            return result;
-        };
+    let size = state.length,
+        getState = (position) => state[position[0]][position[1]],
+        isVisited = (position) => visited[position[0]][position[1]];
 
     // invariant
     if (getState(position) !== player) throw "position should belong to player";
@@ -91,7 +92,7 @@ function isInFreeZone(visited, state, position, player, zone) {
         if (getState(cell) === 0) {
             return true;
         }
-         
+
         if (getState(cell) === player) {
             cellsToProcess.push(cell);
 
@@ -100,7 +101,7 @@ function isInFreeZone(visited, state, position, player, zone) {
             zone.push(cell);
         }
     }
-    
+
     for (var i in cellsToProcess) {
         if (isInFreeZone(visited, state, cellsToProcess[i], player, zone)) {
             return true;
@@ -114,5 +115,6 @@ module.exports = {
     createEmptyBoard: createEmptyBoard,
     getCellsToTest: getCellsToTest,
     isInFreeZone: isInFreeZone,
-    updateBoard : updateBoard
+    updateBoard: updateBoard,
+    surroundingcells : surroundingcells
 };
