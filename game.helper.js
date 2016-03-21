@@ -65,8 +65,8 @@ function updateBoard(state, position, player) {
  * @param player : player to search free group for.
  */
 function isInFreeZone(visited, state, position, player, zone) {
-    let size = state.length,
-        getState = (position) => state[position[0]][position[1]],
+    let size      = state.length,
+        getState  = (position) => state[position[0]][position[1]],
         isVisited = (position) => visited[position[0]][position[1]],
         surroundingcells = (position) => {
             let result = [];
@@ -90,7 +90,9 @@ function isInFreeZone(visited, state, position, player, zone) {
 
         if (getState(cell) === 0) {
             return true;
-        } else if (getState(cell) === player) {
+        }
+         
+        if (getState(cell) === player) {
             cellsToProcess.push(cell);
 
             // mark cell as visited
@@ -98,12 +100,10 @@ function isInFreeZone(visited, state, position, player, zone) {
             zone.push(cell);
         }
     }
-
-    if (cellsToProcess.length !== 0) {
-        for (var i in cellsToProcess) {
-            if (isInFreeZone(visited, state, cellsToProcess[i], player, zone)) {
-                return true;
-            }
+    
+    for (var i in cellsToProcess) {
+        if (isInFreeZone(visited, state, cellsToProcess[i], player, zone)) {
+            return true;
         }
     }
 

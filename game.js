@@ -11,6 +11,9 @@ var create = (size) => {
         play: function(position) {
             if (_state[position.x][position.y] === 0) {
                 _state[position.x][position.y] = currentPlayer;
+                
+                gamehelper.updateBoard(_state, position, currentPlayer);
+                
                 currentPlayer = 3 - currentPlayer;
                 return true;
             }
