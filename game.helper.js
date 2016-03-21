@@ -38,19 +38,23 @@ function getCellsToTest(state, position, player) {
     return cellsToTest.filter(x => state[x[0]][x[1]] === opponent);
 }
 
-/**
- * 
- */
 function updateBoard(state, position, player) {
     let visited = createEmptyBoard(state.length);
 
-    //visited[position.x][position.y] = 1;
     let cellsToTest = getCellsToTest(state, position, player);
 
     if (cellsToTest.length === 0) return;
 
-    cellsToTest.forEach(cellToTest => {
-        isInFreeZone(visited, state, position, 2 * player - 1);
+    cellsToTest.forEach(cell => {
+        // mark cell as visited.
+        visited[cell[0]][cell[1]] = 1;
+        let zone = [cell];
+        if (!isInFreeZone(visited, state, cell, 3 - player, zone)){
+            // zone should be removed
+            zone.forEach(x=>{
+                state[x[0]][x[1]] = 0;
+            });
+        }
     });
 }
 
@@ -109,5 +113,6 @@ function isInFreeZone(visited, state, position, player, zone) {
 module.exports = {
     createEmptyBoard: createEmptyBoard,
     getCellsToTest: getCellsToTest,
-    isInFreeZone: isInFreeZone
+    isInFreeZone: isInFreeZone,
+    updateBoard : updateBoard
 };

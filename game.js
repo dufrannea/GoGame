@@ -11,7 +11,7 @@ var create = (size) => {
         play: function(position) {
             if (_state[position.x][position.y] === 0) {
                 _state[position.x][position.y] = currentPlayer;
-                currentPlayer = 2 - currentPlayer + 1;
+                currentPlayer = 3 - currentPlayer;
                 return true;
             }
             return false;
