@@ -20,8 +20,8 @@ test("Cells to test", (t) => {
     let cells = getCellsToTest(board, { x: 1, y: 1 }, 1);
 
     t.looseEqual(
-        cells,
         [],
+        cells,
         "should be empty when no opponent surrounding cells");
     t.end();
 });
@@ -40,8 +40,8 @@ test("Cells to test", (t) => {
     let cells = getCellsToTest(board, { x: 1, y: 1 }, 1);
 
     t.looseEqual(
-        cells,
         [[2, 1]],
+        cells,
         "should include all opponents surrounding cells");
     t.end();
 })
@@ -61,8 +61,8 @@ test("Cells to test", (t) => {
     let cells = getCellsToTest(board, { x: 0, y: 0 }, 1);
 
     t.looseEqual(
-        cells,
         [[0, 1]],
+        cells,
         "should include all opponents surrounding cells");
     t.end();
 });
@@ -95,15 +95,18 @@ test("dfs", (t) => {
         return p1[1] - p2[1];
     }
 
-    t.looseEqual([
-        [1, 1],
-        [1, 2],
-        [1, 3],
-        [2, 1],
-        [2, 2],
-        [2, 3]
-    ],
-        zone.sort(sorting));
+    t.looseEqual(
+        zone.sort(sorting),
+        [
+            [1, 1],
+            [1, 2],
+            [1, 3],
+            [2, 1],
+            [2, 2],
+            [2, 3]
+        ],
+        "all cells to remove should be listed");
+
     t.end();
 });
 
@@ -115,7 +118,7 @@ test("board updating", (t) => {
         [2, 1, 1, 1],
         [0, 2, 2, 2]
     ];
-    
+
     let expected = [
         [0, 2, 2, 2],
         [2, 0, 0, 0],
@@ -123,8 +126,42 @@ test("board updating", (t) => {
         [0, 2, 2, 2]
     ]
     gamehelper.updateBoard(board, { x: 3, y: 2 }, 2);
-    
-    t.looseEqual(expected, board);
-    t.end();
-})
 
+    t.looseEqual(
+        board,
+        expected, 
+        "all center player 2 pieces should be removed");
+        
+    t.end();
+});
+
+test("board with inside blocks", (t) => {
+    let board = [
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 1, 1, 0],
+        [0, 1, 2, 2, 2, 1, 0],
+        [0, 1, 1, 2, 1, 1, 0],
+        [0, 1, 2, 2, 2, 1, 0],
+        [0, 1, 1, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0, 0, 0]
+    ];
+
+    let expected = [
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 1, 1, 0],
+        [0, 1, 0, 0, 0, 1, 0],
+        [0, 1, 1, 0, 1, 1, 0],
+        [0, 1, 0, 0, 0, 1, 0],
+        [0, 1, 1, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0, 0, 0]
+    ];
+
+    gamehelper.updateBoard(board, { x: 2, y: 5 }, 1);
+
+    t.looseEqual(
+        board,
+        expected,
+        "all center player 2 pieces should be removed");
+
+    t.end();
+});
