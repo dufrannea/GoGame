@@ -55,9 +55,9 @@ function getCellsToTest(state, position, player) {
  */
 function updateBoard(state, position, player) {
     getZonesToRemove(state, position, player).forEach(zone => {
-            zone.forEach(x => {
-                state[x[0]][x[1]] = 0;
-            });
+        zone.forEach(x => {
+            state[x[0]][x[1]] = 0;
+        });
     });
 }
 
