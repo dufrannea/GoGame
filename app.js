@@ -42,7 +42,7 @@ io.on('connection', function(socket) {
 
         if (waitingToPlay.length === 2) {
             var game = createGame(19);
-
+            
             var roomName = guid();
             
             var index = 1;
@@ -51,7 +51,7 @@ io.on('connection', function(socket) {
                 // join the game room
                 x.join(roomName);
                 x.emit('started',{
-                    state : game.state,
+                    state : game.state(),
                     player : index
                 });
                 index++;
@@ -98,7 +98,7 @@ io.on('connection', function(socket) {
           // send state to everyone
           io.to(game.roomName)
             .emit("update", { 
-                state : gameEngine.state,
+                state : gameEngine.state(),
                 player : gameEngine.currentPlayer()
             }); 
     })

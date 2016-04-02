@@ -89,7 +89,11 @@ var create = (size) => {
 
         },
         currentPlayer: () => currentPlayer,
-        state: _state
+        state: () => _state,
+        setState : function(s)
+        {
+          _state = s  
+        } 
     }
 }
 

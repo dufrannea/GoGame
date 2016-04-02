@@ -1,11 +1,11 @@
 var d3 = require("d3");
 
-var board = function(elementSelector, playerIndex) {
+var board = function(elementSelector, playerIndex, size) {
     var marginTop = 30,
         marginLeft = 30,
-        size = 13,
         boardSize = 700,
-        margin = 40;
+        margin = 40,
+        circleradius = (boardSize - 2*margin)/(2*size);
 
     var scale = d3.scale.linear()
         .domain([0, size - 1])
@@ -71,10 +71,10 @@ var board = function(elementSelector, playerIndex) {
             .data(positions)
             .enter()
             .append("circle")
-            .attr("cx", function(d) { return scale(d[0]) })
-            .attr("cy", function(d) { return scale(d[1]) })
-            .attr("r", 20)
-            .attr("fill", function(d) { return d[2] === 0 ? "white" : "black" });
+                .attr("cx", function(d) { return scale(d[0]) })
+                .attr("cy", function(d) { return scale(d[1]) })
+                .attr("r", circleradius)
+                .attr("fill", function(d) { return d[2] === 1 ? "white" : "black" });
 
         var hoverGroup = svg.append("g");
 
@@ -86,13 +86,13 @@ var board = function(elementSelector, playerIndex) {
                 .append("circle")
                 .attr("cx", function(d) { return scale(d[0]) })
                 .attr("cy", function(d) { return scale(d[1]) })
-                .attr("r", 20)
+                .attr("r", circleradius)
                 .attr("fill", function(d) { return d[2] === 1 ? "white" : "black" });
 
             hovercircles
                 .attr("cx", function(d) { return scale(d[0]) })
                 .attr("cy", function(d) { return scale(d[1]) })
-                .attr("r", 20)
+                .attr("r", circleradius)
                 .attr("fill", function(d) { return d[2] === 1 ? "white" : "black" });
             hovercircles.exit().remove();
         }
@@ -142,14 +142,16 @@ var board = function(elementSelector, playerIndex) {
             .append("circle")
             .attr("cx", function(d) { return scale(d[0]) })
             .attr("cy", function(d) { return scale(d[1]) })
-            .attr("r", 20)
+            .attr("r", circleradius)
             .attr("fill", function(d) { return d[2] === 1 ? "white" : "black" });
 
         localCircles
             .attr("cx", function(d) { return scale(d[0]) })
             .attr("cy", function(d) { return scale(d[1]) })
-            .attr("r", 20)
+            .attr("r", circleradius)
             .attr("fill", function(d) { return d[2] === 1 ? "white" : "black" });
+        
+        localCircles.exit().remove();
     }
 
     function freeze() {

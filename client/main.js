@@ -14,24 +14,7 @@ socket.on('connected', function(data) {
 var localboard;
 var playerIndex;
 
-socket.on('started', function(data) {
-    playerIndex = data.player;
-    localboard = board("#go-board-container", playerIndex);
-    
-    localboard.create([], function(coords) {
-        socket.emit("played", coords);
-    });
-    
-    // player 1 starts.
-    if (playerIndex !==1){
-        localboard.freeze()
-    }
-});
-
-socket.on("update", function(updates) {
-    var state = updates.state;
-    var currentPlayer = updates.player;
-
+var getpositions = (state) => {
     var newpos = [];
 
     for (var i = 0; i < state.length; i++) {
@@ -42,6 +25,28 @@ socket.on("update", function(updates) {
             }
         }
     }
+    return newpos;
+}
+
+socket.on('started', function(data) {
+    playerIndex = data.player;
+    localboard = board("#go-board-container", playerIndex, data.state.length);
+
+    localboard.create(getpositions(data.state), function(coords) {
+        socket.emit("played", coords);
+    });
+
+    // player 1 starts.
+    if (playerIndex !== 1) {
+        localboard.freeze()
+    }
+});
+
+socket.on("update", function(updates) {
+    var state = updates.state;
+    var currentPlayer = updates.player;
+
+    var newpos = getpositions(state);
 
     // i should play
     if (currentPlayer === playerIndex) {
