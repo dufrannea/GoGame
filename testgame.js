@@ -5,8 +5,8 @@ var create = require('./game').create;
 
 test("When creating game of size 19", (t) => {
     let game = create(19);
-    t.equal(game.state.length, 19, "width should be 19")
-    t.equal(game.state[0].length, 19, "height should be 19")
+    t.equal(game.state().length, 19, "width should be 19")
+    t.equal(game.state()[0].length, 19, "height should be 19")
     t.end();
 });
 
@@ -39,7 +39,7 @@ test("When player plays valid move", (t)=>{
         y:0
     });
     
-    t.equal(game.state[0][0], 1, "state should be updated");
+    t.equal(game.state()[0][0], 1, "state should be updated");
     
     t.end();
 })
@@ -59,6 +59,6 @@ test("When player plays on already played cell", (t)=>{
         y:0
     });
     
-    t.equal(game.state[0][0], 1, "state should not change");
+    t.equal(game.state()[0][0], 1, "state should not change");
     t.end();
 })

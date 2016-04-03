@@ -62,14 +62,14 @@ function updateBoard(state, position, player) {
 }
 
 function getZonesToRemove(state, position, player) {
-    let visited = createEmptyBoard(state.length);
 
     let cellsToTest = getCellsToTest(state, position, player);
 
     let zonesToRemove = [];
     if (cellsToTest.length === 0) return zonesToRemove;
-
+    
     cellsToTest.forEach(cell => {
+        let visited = createEmptyBoard(state.length);
         // mark cell as visited.
         visited[cell[0]][cell[1]] = 1;
         let zone = [cell];
