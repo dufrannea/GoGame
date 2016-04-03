@@ -7,7 +7,7 @@ const gulp = require('gulp'),
 
 gulp.task("build:index", () => {
     return gulp
-        .src(["client/index.html"])
+        .src(["client/*.html"])
         .pipe(gulp.dest("./build"))
 })
 

@@ -1,29 +1,31 @@
 {
-    "name": "go",
-    "version": "1.0.0",
-    "description": "",
-    "main": "app.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node app.js"
-    },
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "d3": "^3.5.16",
-        "express": "^4.13.4",
-        "knockout": "^3.4.0",
-        "socket.io": "^1.4.5",
-        "socket.io-client": "^1.4.5"
-    },
-    "devDependencies": {
-        "gulp": "^3.9.1",
-        "gulp-tape": "0.0.7",
-        "gulp-webpack": "^1.5.0",
-        "tap-spec": "^4.1.1",
-        "tape": "^4.5.1"
-    },
-    "engines": {
-        "node": ">=4.2.4"
-    }
+  "name": "go",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-session": "^2.0.0-alpha.1",
+    "d3": "^3.5.16",
+    "express": "^4.13.4",
+    "googleapis": "^4.0.0",
+    "knockout": "^3.4.0",
+    "socket.io": "^1.4.5",
+    "socket.io-client": "^1.4.5"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-tape": "0.0.7",
+    "gulp-webpack": "^1.5.0",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.5.1"
+  },
+  "engines": {
+    "node": ">=4.2.4"
+  }
 }
