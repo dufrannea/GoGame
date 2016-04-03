@@ -2,7 +2,7 @@ var io = require("socket.io-client");
 var ko = require('knockout');
 var board = require('./board').board;
 
-var socket = io.connect('http://barbarossa:8080');
+var socket = io.connect(window.location.origin);
 socket.on('message', function(data) {
     messages.push(data);
 });
