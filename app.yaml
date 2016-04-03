@@ -4,3 +4,9 @@ vm: true
 # Temporary setting to keep gcloud from uploading node_modules
 skip_files:
  - ^node_modules$
+ - ^client$
+ - ^.vscode$
+ - ^gulpfile.js$
+ - ^jsconfig.json$
+ - ^game.helper.tests.js$
+ - ^testgame.js$
