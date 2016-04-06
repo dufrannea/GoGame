@@ -1,10 +1,10 @@
 var express = require('express')
 var app = express();
-var config = require('./config')();
+var config = require('./server/config')();
 var server = require('http').Server(app);
 
 var session = require('cookie-session');
-var oauth2 = require('./lib/oauth2')(config.oauth2);
+var oauth2 = require('./server/oauth2')(config.oauth2);
 
 app.use(session({
   secret: config.secret,
@@ -25,7 +25,7 @@ app.get('/', function(req, res) {
 // serve static files
 app.use(express.static('build'));
 
-require('./sockets')(server);
+require('./server/sockets')(server);
 
 if (module === require.main) {
   // Start the server

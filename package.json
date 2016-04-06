@@ -13,6 +13,7 @@
     "cookie-session": "^2.0.0-alpha.1",
     "d3": "^3.5.16",
     "express": "^4.13.4",
+    "gcloud": "^0.28.0",
     "googleapis": "^4.0.0",
     "knockout": "^3.4.0",
     "socket.io": "^1.4.5",

@@ -1,7 +1,7 @@
 'use strict'
 
-var test = require('tape'),
-    gamehelper = require('./game.helper'),
+const test = require('tape'),
+    gamehelper = require('../server/game.helper'),
     createEmptyBoard = gamehelper.createEmptyBoard,
     getCellsToTest = gamehelper.getCellsToTest,
     isInFreeZone = gamehelper.isInFreeZone;

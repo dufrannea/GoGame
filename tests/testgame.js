@@ -1,7 +1,7 @@
 'use strict'
 
 var test = require('tape');
-var create = require('./game').create;
+var create = require('../server/game').create;
 
 test("When creating game of size 19", (t) => {
     let game = create(19);

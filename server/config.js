@@ -28,10 +28,10 @@ var getConfig = module.exports = function() {
             scopes: ['email', 'profile']
         }
     };
-    //   if (process.env.NODE_ENV == "development"){
-    return Object.assign({}, ambientConfig, require('./local.config'));
-    //   }
-    //   return ambientConfig;
+    return Object.assign(
+                    {}, 
+                    ambientConfig, 
+                    require('./local.config'));
 };
 
 var config = getConfig();

@@ -41,8 +41,7 @@ gulp.task('watch', () => {
 
 gulp.task('test', function() {
     return gulp.src([
-                'testgame.js',
-                'game.helper.tests.js'
+                'tests/*.js',
             ])
             .pipe(tape({
                 reporter: tapSpec()
